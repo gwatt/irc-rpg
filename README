@@ -1,2 +1,8 @@
 This is several disparate files all related to improving the experience of playing
 tabletop RPGs over IRC.
+
+scribe/
+- The contents of the scribe folder deal with logging IRC conversations
+- scribe.pl handles the actual logging. Requires POE::Component::IRC
+- scribebak will do a daily backup of logs to folders named yyyy-mm-dd
+- scribecron will run scribebak (assumes scribebak in /usr/local/bin)
