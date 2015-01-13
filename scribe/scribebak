@@ -3,7 +3,7 @@
 shopt -s nullglob
 
 DATE=$(date --date="@$(($(date +%s) - (24 * 60 * 60)))" +%Y-%m-%d)
-LOGDIR='/var/www/blood-in-the-water'
+LOGDIR=''
 
 for f in $LOGDIR/\#*.log; do
 	mkdir -p $LOGDIR/$DATE
