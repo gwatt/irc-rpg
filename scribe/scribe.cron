@@ -1,2 +1,2 @@
 
-* 5 * * * www-data /usr/local/bin/scribebak
+* 5 * * * $SCRIBEUSER /usr/local/bin/scribebak
