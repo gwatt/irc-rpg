@@ -84,6 +84,22 @@ static int unsigned ntargets = 0;
 **
 */
 
+/* disguise_nick()
+ *
+ * inputs       - pointer to Client to modify
+ *              - pointer to client to actual source
+ *              - message
+ *
+ * output       - YES if should use disguised nick, NO if not.
+ * side effects - text may be modified.
+ */
+
+static int
+disguise_nick(struct Client *mock_p, struct Client *source_p, char **text)
+{
+  return 0;
+}
+
 /* duplicate_ptr()
  *
  * inputs       - pointer to check
