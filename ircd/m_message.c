@@ -97,7 +97,28 @@ static int unsigned ntargets = 0;
 static int
 disguise_nick(struct Client *mock_p, struct Client *source_p, char **text)
 {
-  return 0;
+  char *msg = NULL;
+  int i = 0;
+  if (!text || !*text)
+    return 0;
+  msg = *text;
+  if (IsEmpty(msg) || *msg != '=')
+    return 0;
+
+  msg++;
+
+  *mock_p = *source_p;
+  bzero(mock_p->name, sizeof mock_p->name);
+  while (*msg && !isspace(*msg) && i < NICKLEN)
+    mock_p->name[i++] = *(msg++);
+  if (IsEmpty(mock_p->name) || !valid_nickname(mock_p->name, 1))
+    return 0;
+  if (!isspace(*msg))
+    return 0;
+
+  *text = msg + 1;
+
+  return 1;
 }
 
 /* duplicate_ptr()
