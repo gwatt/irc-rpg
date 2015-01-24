@@ -1,0 +1,4 @@
+So far, I have been unable to transfer a compiled m_message, even between
+similar linux systems. As such, I recommend downloading a copy of ircd-hybrid
+(https://github.com/ircd-hybrid/ircd-hybrid) and replacing the original in
+modules/core/.
