@@ -6,3 +6,7 @@ scribe/
 - scribe.pl handles the actual logging. Requires POE::Component::IRC
 - scribebak will do a daily backup of logs to folders named yyyy-mm-dd
 - scribecron will run scribebak (assumes scribebak in /usr/local/bin)
+
+ircd/
+- The contents of the ircd folder are for the irc server
+- m_message.c is a replacement for modules/core/m_message.c
