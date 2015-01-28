@@ -96,8 +96,9 @@ static int unsigned ntargets = 0;
  */
 
 static int
-disguise_nick(struct Client *mock_p, struct Client *source_p, char **text)
+disguise_nick(char *nick_tmp, struct Client *source_p, char **text)
 {
+  char nick[NICKLEN + 1] = {};
   char *msg = NULL;
   int i = 0;
   if (!text || !*text)
@@ -108,15 +109,14 @@ disguise_nick(struct Client *mock_p, struct Client *source_p, char **text)
 
   msg++;
 
-  *mock_p = *source_p;
-  bzero(mock_p->name, sizeof mock_p->name);
   while (*msg && !isspace(*msg) && i < NICKLEN)
-    mock_p->name[i++] = *(msg++);
-  if (EmptyString(mock_p->name) || !valid_nickname(mock_p->name, 1))
+    nick[i++] = *(msg++);
+  if (EmptyString(nick) || !valid_nickname(nick, 1))
     return 0;
   if (!isspace(*msg))
     return 0;
-
+  strcpy(source_p->name, nick_tmp);
+  strcpy(nick, source_p->name);
   *text = msg + 1;
 
   return 1;
@@ -741,7 +741,7 @@ m_message(int p_or_n, const char *command, struct Client *source_p, int parc, ch
 static int
 m_privmsg(struct Client *source_p, int parc, char *parv[])
 {
-  struct Client mock;
+  char nick[NICKLEN + 1];
   /*
    * Servers have no reason to send privmsgs, yet sometimes there is cause
    * for a notice.. (for example remote kline replies) --fl_
@@ -752,10 +752,10 @@ m_privmsg(struct Client *source_p, int parc, char *parv[])
   if (MyConnect(source_p))
     source_p->localClient->last_privmsg = CurrentTime;
 
-  if (disguise_nick(&mock, source_p, &parv[2]))
-    source_p = &mock;
+  disguise_nick(nick, source_p, &parv[2]);
 
   m_message(PRIVMSG, "PRIVMSG", source_p, parc, parv);
+  strcpy(nick, source_p->name);
   return 0;
 }
 
