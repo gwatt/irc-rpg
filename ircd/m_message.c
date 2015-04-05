@@ -115,8 +115,8 @@ disguise_nick(char *nick_tmp, struct Client *source_p, char **text)
     return 0;
   if (!isspace(*msg))
     return 0;
-  strcpy(source_p->name, nick_tmp);
-  strcpy(nick, source_p->name);
+  memmove(nick_tmp, source_p->name, sizeof source_p->name);
+  memmove(source_p->name, nick, sizeof nick);
   *text = msg + 1;
 
   return 1;
