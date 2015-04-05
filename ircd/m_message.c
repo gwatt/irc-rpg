@@ -98,7 +98,7 @@ static int unsigned ntargets = 0;
 static int
 disguise_nick(char *nick_tmp, struct Client *source_p, char **text)
 {
-  char nick[NICKLEN + 1] = {};
+  char nick[sizeof source_p->name] = {};
   char *msg = NULL;
   int i = 0;
   if (!text || !*text)
@@ -741,7 +741,8 @@ m_message(int p_or_n, const char *command, struct Client *source_p, int parc, ch
 static int
 m_privmsg(struct Client *source_p, int parc, char *parv[])
 {
-  char nick[NICKLEN + 1];
+  int use_disguise = 0;
+  char nick[sizeof source_p->name];
   /*
    * Servers have no reason to send privmsgs, yet sometimes there is cause
    * for a notice.. (for example remote kline replies) --fl_
@@ -752,10 +753,11 @@ m_privmsg(struct Client *source_p, int parc, char *parv[])
   if (MyConnect(source_p))
     source_p->localClient->last_privmsg = CurrentTime;
 
-  disguise_nick(nick, source_p, &parv[2]);
+  use_disguise = disguise_nick(nick, source_p, &parv[2]);
 
   m_message(PRIVMSG, "PRIVMSG", source_p, parc, parv);
-  strcpy(nick, source_p->name);
+  if (use_disguise)
+    memmove(source_p->name, nick, sizeof nick);
   return 0;
 }
 
